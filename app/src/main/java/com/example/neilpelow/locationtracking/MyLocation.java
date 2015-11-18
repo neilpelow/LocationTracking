@@ -65,13 +65,14 @@ public class MyLocation extends AppCompatActivity implements LocationListener {
     protected void onResume() {
         super.onResume();
         try {
-        locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER,
-                500,
-                1,
-                this);
+            Log.w("Tracking resumed", " ")
+            locationManager.requestLocationUpdates(
+            LocationManager.GPS_PROVIDER,
+            500,
+            1,
+            this);
         } catch (SecurityException e) {
-        Log.d("MyLocation :", "u dun fkd up", e);
+            Log.d("MyLocation :", "u dun fkd up", e);
         }
     }
 
@@ -79,6 +80,7 @@ public class MyLocation extends AppCompatActivity implements LocationListener {
     protected void onPause() {
         super.onPause();
         try {
+            Log.w("Tracking paused", " ")
             locationManager.removeUpdates(this);
         } catch (SecurityException e) {
             Log.d("MyLocation :", "u dun fkd up", e);
