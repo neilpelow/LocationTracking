@@ -65,7 +65,7 @@ public class MyLocation extends AppCompatActivity implements LocationListener {
     protected void onResume() {
         super.onResume();
         try {
-            Log.w("Tracking resumed", " ")
+            Log.w("Tracking resumed", " ");
             locationManager.requestLocationUpdates(
             LocationManager.GPS_PROVIDER,
             500,
@@ -80,7 +80,7 @@ public class MyLocation extends AppCompatActivity implements LocationListener {
     protected void onPause() {
         super.onPause();
         try {
-            Log.w("Tracking paused", " ")
+            Log.w("Tracking paused", " ");
             locationManager.removeUpdates(this);
         } catch (SecurityException e) {
             Log.d("MyLocation :", "u dun fkd up", e);
