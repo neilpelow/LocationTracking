@@ -1,6 +1,8 @@
 package com.example.neilpelow.locationtracking;
 
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -10,9 +12,13 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 public class MyLocation extends AppCompatActivity implements LocationListener {
 
-    private TextView locationText;
+    private TextView locationText, addressText;
     private LocationManager locationManager;
 
     @Override
@@ -20,12 +26,15 @@ public class MyLocation extends AppCompatActivity implements LocationListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         locationText = (TextView) findViewById(R.id.locationText);
+        addressText = (TextView)findViewById(R.id.addressView);
         setUpLocation();
+        //getAddress(-8.444537, 54.636725);
     }
 
     public void onLocationChanged(Location location) {
         String latestLocation = "";
         if (location != null) {
+            getAddress(location.getLongitude(), location.getLatitude());
             Log.w("onLocationChanged runs", " ");
             latestLocation = String.format("Current Location \n Longitute: %1$s \n Latitude: %2$s",
                     location.getLongitude(), location.getLatitude());
@@ -87,6 +96,44 @@ public class MyLocation extends AppCompatActivity implements LocationListener {
         }
 
     }
+
+    public void getAddress(double longitude, double latitude) {
+
+        if(longitude != 0.0 && latitude != 0.0) {
+
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+
+            String errorMessage = "";
+
+            List<Address> addresses;
+
+            try {
+                addresses = geocoder.getFromLocation(
+                        latitude,
+                        longitude,
+                        1);
+
+                try {
+
+                    String addressLine = addresses.get(0).getAddressLine(0);
+                    String city = addresses.get(0).getLocality();
+                    String country = addresses.get(0).getCountryName();
+                    //String county = addresses.get(0).getSubAdminArea();
+
+                    addressText.setText(addressLine+"\n"+city+"\n"+country);
+
+                }catch (IndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                }
+
+            } catch (IOException ioExcepion) {
+                errorMessage = getString(R.string.no_address_found);
+                Log.w("io Exception", " ");
+            }
+        }
+    }
+
+
 
 
 }//end MyLocation
